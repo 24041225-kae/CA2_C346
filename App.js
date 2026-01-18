@@ -4,6 +4,10 @@ import Feather from '@expo/vector-icons/Feather';
 
 let originalData = [];
 
+//capitalise first letter
+const capFirst = str =>
+  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
@@ -14,15 +18,19 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 3
   },
+  leftColumn:{
+    flex: 1,
+    marginRight: 6
+  },
   name: {
     flex: 1,
     fontSize: 23,
-    marginLeft: 8
+    marginLeft: 6
   },
   text: {
     fontSize: 16,
     color: '#555',
-    marginRight: 12
+    marginLeft: 6,
   },
   img: {
     width: 120,
@@ -31,10 +39,16 @@ const styles = StyleSheet.create({
   search: {
     borderWidth: 1,
     margin: 10,
+    marginTop:10,
     padding: 10,
     borderRadius: 8,
     backgroundColor: '#f5f5f5',
     borderColor: '#ddd'
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 2,
   }
 });
 
@@ -62,9 +76,15 @@ const App = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
-      <Text style={styles.name}>{item.item}</Text>
-      <Text style={styles.text}>{item.logged_on}</Text>
-      <Text style={styles.text}>{item.saved_in_g} g</Text>
+      <View style={styles.leftColumn}>
+        <Text style={styles.name}>{capFirst(item.item)}</Text> 
+      </View>
+      <View style={styles.leftColumn}>
+        <Text style={styles.text}>{item.logged_on.split('T')[0]}</Text>
+      </View>
+      <View style={styles.leftColumn}>
+        <Text style={styles.text}>{capFirst(item.category)}</Text>
+      </View>
       <Image
         source={{ uri: item.item_pic }}
         style={styles.img}
@@ -76,8 +96,11 @@ const App = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#fafafa' }}>
       <StatusBar />
-      <Text style={{ margin: 10, fontSize: 16, fontWeight: '600' }}>Search:</Text>
-      <Feather name="bookmark" size={24} color="black" />
+      <Text style={{ margin: 10, marginTop:50, fontSize: 16, fontWeight: '600' }}><Feather name="bookmark" size={24} color="black" />Search:</Text>
+      <TextInput
+      style={styles.search}
+      placeholder="Type to filter…"
+      onChangeText={FilterData}  />
       <FlatList
         data={myData}
         renderItem={renderItem}
