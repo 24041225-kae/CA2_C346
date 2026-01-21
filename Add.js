@@ -1,8 +1,7 @@
-import React,{useState} from 'react';
-import { StatusBar, View, Button, Text, TextInput, Alert } from 'react-native';
-
 import React, { useState } from 'react';
-import { StatusBar, View, Button, Text, TextInput, Alert, Picker } from 'react-native';
+import { StatusBar, View, Button, Text, TextInput, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker'; 
+
 
 const Add = ({ navigation }) => {
   const [category, setCategory] = useState('reduce');
@@ -11,7 +10,6 @@ const Add = ({ navigation }) => {
   const [saved, setSaved]       = useState(0);
   const [logged, setLogged]     = useState(new Date().toISOString().slice(0,10)); // YYYY-MM-DD
 
-  /* ===== HANDLERS ===== */
   const submit = () => {
     if (!item) { Alert.alert('Item name required'); return; }
 
@@ -23,7 +21,7 @@ const Add = ({ navigation }) => {
       logged_on: logged
     };
 
-    fetch('https://ca2webservice.onrender.com/additems', {   // <-- placeholder
+    fetch('https://ca2webservice.onrender.com/additem', {   // <-- placeholder
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -41,7 +39,7 @@ const Add = ({ navigation }) => {
       <Text>Category:</Text>
       <Picker
         selectedValue={category}
-        onValueChange={setCategory}
+        onValueChange={(itemValue) => setCategory(itemValue)}
         style={{ borderWidth: 1, borderColor: '#ccc' }}
       >
         <Picker.Item label="Reduce" value="reduce" />
